@@ -1,0 +1,23 @@
+version: '2'
+services:
+  mantisbt:
+    image: prehley/rpi-mantisbt:latest
+    ports:
+    - 8081:80/tcp
+    links:
+    - mysql:mysql
+    depends_on:
+    - mysql
+    restart: unless-stopped
+
+  mysql:
+    image: hypriot/rpi-mysql:latest
+    environment:
+      MYSQL_PASSWORD: dbadminPassword
+      MYSQL_ROOT_PASSWORD: rootPassword
+      MYSQL_USER: dbadmin
+    restart: unless-stopped
+    volumes:
+    - /home/mysql/sqldump:/docker-entrypoint-initdb.d
+    command:
+    - --bind-address=0.0.0.0
